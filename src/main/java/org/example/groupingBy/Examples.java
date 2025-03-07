@@ -66,6 +66,7 @@ class Person {
         this.city = city;
     }
 }
+
 // Задача 2. Класс Student (Студент)
 class Student {
     private String name;
@@ -344,7 +345,13 @@ public class Examples {
 //                ));
 //        System.out.println(ordersCollect);
 
-
+//Задача 2. Многоуровневая группировка студентов по классу и по результату (прохождение/не прохождение)
+//Условие:
+//Дан список студентов (Student), где у каждого студента есть поля:
+// класс (classLevel) и балл (score). Сгруппировать студентов по классу,
+// а затем в каждой группе разделить студентов на тех, кто прошёл экзамен
+// (балл ≥ 50) и не прошёл (балл < 50). Подсчитать количество студентов
+// в каждой подгруппе.
         List<Student> students = Arrays.asList(
                 new Student("Alice", 75, 10),
                 new Student("Bob", 45, 10),
@@ -354,10 +361,23 @@ public class Examples {
         );
 
 
+        Map<Integer, Map<Boolean, Long>> collect = students.stream()
+                .collect(Collectors.groupingBy(
+                        Student::getClassLevel,
+                        Collectors.groupingBy(
+                                student -> student.getScore() >= 50,
 
+                                Collectors.counting()
+                        )
+                ));
+        System.out.println(collect);
 
-
-
+//Задача 3. Многоуровневая группировка продаж по региону и категории с суммированием продаж
+//Условие:
+//Дан список продаж (Sale), где у каждой продажи есть поля: регион (region),
+// категория товара (category) и сумма продажи (amount). Сгруппировать продажи
+// сначала по региону, затем внутри каждого региона – по категории товара.
+// Для каждой подгруппы вычислить суммарную продажную сумму.
 
         List<Sale> sales = Arrays.asList(
                 new Sale("North", "Electronics", 150.0),
@@ -367,5 +387,17 @@ public class Examples {
                 new Sale("North", "Electronics", 100.0),
                 new Sale("South", "Books", 50.0)
         );
+
+        Map<String, Map<String, Double>> collect1 = sales.stream()
+                .collect(Collectors.groupingBy(
+                        Sale::getRegion,
+                        Collectors.groupingBy(
+                                Sale::getCategory,
+                                Collectors.summingDouble(Sale::getAmount)
+                        )
+                ));
+        System.out.println(collect1);
+
+
     }
 }
