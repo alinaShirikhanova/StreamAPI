@@ -28,8 +28,7 @@ public class Examples {
 
         List<String> words = List.of("Java", "Stream", "API");
         int totalLength = words.stream().mapToInt(String::length).sum();
-        System.out.println(totalLength); // 12
-
+        System.out.println(totalLength);
     }
 }
 
